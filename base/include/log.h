@@ -26,39 +26,40 @@
 #endif
 
 #if CONFIG_OS == OPTION_OS_ANDROID
-    #include <cutils/log.h>
+#include <cutils/log.h>
 
-    #define LOG_LEVEL_ERROR     ANDROID_LOG_ERROR
-    #define LOG_LEVEL_WARNING   ANDROID_LOG_WARN
-    #define LOG_LEVEL_INFO      ANDROID_LOG_INFO
-    #define LOG_LEVEL_VERBOSE   ANDROID_LOG_VERBOSE
-    #define LOG_LEVEL_DEBUG     ANDROID_LOG_DEBUG
-    
-    #define AWLOG(level, fmt, arg...)  \
-        LOG_PRI(level, LOG_TAG, "<%s:%u>: "fmt, strrchr(__FILE__, '/')+1, __LINE__, ##arg)
-        
+#define LOG_LEVEL_ERROR ANDROID_LOG_ERROR
+#define LOG_LEVEL_WARNING ANDROID_LOG_WARN
+#define LOG_LEVEL_INFO ANDROID_LOG_INFO
+#define LOG_LEVEL_VERBOSE ANDROID_LOG_VERBOSE
+#define LOG_LEVEL_DEBUG ANDROID_LOG_DEBUG
+
+#define AWLOG(level, fmt, arg...) \
+    LOG_PRI(level, LOG_TAG, "<%s:%u>: " fmt, strrchr(__FILE__, '/') + 1, __LINE__, ##arg)
+
 #elif CONFIG_OS == OPTION_OS_LINUX
-    #include <stdio.h>
-    #include <string.h>
-    
-    #define LOG_LEVEL_ERROR     "error  "
-    #define LOG_LEVEL_WARNING   "warning"
-    #define LOG_LEVEL_INFO      "info   "
-    #define LOG_LEVEL_VERBOSE   "verbose"
-    #define LOG_LEVEL_DEBUG     "debug  "
-    
-    #define AWLOG(level, fmt, arg...)  \
-        printf("%s: %s <%s:%u>: "fmt"\n", level, LOG_TAG, __FILE__, __LINE__, ##arg)
+#include <stdio.h>
+#include <string.h>
+
+#define LOG_LEVEL_ERROR "error  "
+#define LOG_LEVEL_WARNING "warning"
+#define LOG_LEVEL_INFO "info   "
+#define LOG_LEVEL_VERBOSE "verbose"
+#define LOG_LEVEL_DEBUG "debug  "
+
+#define AWLOG(level, fmt, arg...) \
+    printf("%s: %s <%s:%u>: " fmt "\n", level, LOG_TAG, __FILE__, __LINE__, ##arg)
 #else
-    #error "invalid configuration of os."
+#error "invalid configuration of os."
 #endif
 
-#define loge(fmt, arg...) \
-    do { \
-        AWLOG(LOG_LEVEL_ERROR, "\033[40;31m"fmt"\033[0m", ##arg) ; \
-        CdxBTDump(); \
+#define loge(fmt, arg...)                                           \
+    do                                                              \
+    {                                                               \
+        AWLOG(LOG_LEVEL_ERROR, "\033[40;31m" fmt "\033[0m", ##arg); \
+        CdxBTDump();                                                \
     } while (0)
-    
+
 #define logw(fmt, arg...) AWLOG(LOG_LEVEL_WARNING, fmt, ##arg)
 #define logi(fmt, arg...)
 #define logd(fmt, arg...) AWLOG(LOG_LEVEL_WARNING, fmt, ##arg)
